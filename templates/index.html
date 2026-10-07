@@ -1,0 +1,623 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Intelligent Email Assistant</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: "Segoe UI", Arial, sans-serif;
+            background: #f3f6fb;
+            color: #1e293b;
+        }
+
+        /* HEADER */
+
+        .header {
+            background: linear-gradient(135deg, #0f2f75, #2563eb);
+            color: white;
+            padding: 35px 8%;
+        }
+
+        .header-content {
+            max-width: 1200px;
+            margin: auto;
+        }
+
+        .brand {
+            font-size: 14px;
+            font-weight: 600;
+            letter-spacing: 1px;
+            opacity: 0.85;
+            margin-bottom: 10px;
+        }
+
+        .header h1 {
+            margin: 0;
+            font-size: 32px;
+        }
+
+        .header p {
+            margin: 8px 0 0;
+            font-size: 15px;
+            opacity: 0.9;
+        }
+
+        /* MAIN */
+
+        .container {
+            max-width: 1200px;
+            width: 92%;
+            margin: 30px auto;
+        }
+
+        /* GRID */
+
+        .main-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 25px;
+        }
+
+        /* CARD */
+
+        .card {
+            background: white;
+            border-radius: 14px;
+            padding: 25px;
+            box-shadow: 0 4px 18px rgba(15, 23, 42, 0.07);
+            border: 1px solid #e5eaf2;
+        }
+
+        .card h2 {
+            margin: 0 0 20px;
+            font-size: 20px;
+            color: #123579;
+        }
+
+        .section-title {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .icon {
+            width: 35px;
+            height: 35px;
+            border-radius: 9px;
+            background: #e8f0ff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 17px;
+        }
+
+        /* FORM */
+
+        label {
+            display: block;
+            margin: 16px 0 7px;
+            font-size: 14px;
+            font-weight: 600;
+            color: #334155;
+        }
+
+        input,
+        textarea,
+        select {
+            width: 100%;
+            padding: 13px 14px;
+            border: 1px solid #d5dce8;
+            border-radius: 8px;
+            background: #fbfcfe;
+            font-size: 14px;
+            color: #1e293b;
+            outline: none;
+            transition: 0.2s;
+        }
+
+        input:focus,
+        textarea:focus,
+        select:focus {
+            border-color: #2563eb;
+            background: white;
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.08);
+        }
+
+        textarea {
+            height: 145px;
+            resize: vertical;
+        }
+
+        /* BUTTON */
+
+        .generate-btn {
+            width: 100%;
+            margin-top: 22px;
+            padding: 14px;
+            border: none;
+            border-radius: 8px;
+            background: #2563eb;
+            color: white;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .generate-btn:hover {
+            background: #1749b5;
+            transform: translateY(-1px);
+        }
+
+        /* STATUS */
+
+        .status {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: #f0fdf4;
+            border: 1px solid #bbf7d0;
+            color: #15803d;
+            padding: 10px 13px;
+            border-radius: 8px;
+            font-size: 13px;
+            margin-top: 20px;
+        }
+
+        .dot {
+            width: 8px;
+            height: 8px;
+            background: #22c55e;
+            border-radius: 50%;
+        }
+
+        /* RESULTS */
+
+        .full-width {
+            margin-top: 25px;
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+        }
+
+        .info-box {
+            background: #f8fafc;
+            border: 1px solid #e5eaf2;
+            border-radius: 9px;
+            padding: 15px;
+        }
+
+        .info-label {
+            font-size: 11px;
+            color: #64748b;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            margin-bottom: 7px;
+        }
+
+        .info-value {
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+        /* INTENT */
+
+        .intent {
+            display: inline-block;
+            background: #e8f0ff;
+            color: #1d4ed8;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        /* REPLY */
+
+        .reply-box {
+            background: #f8fbff;
+            border: 1px solid #dbeafe;
+            border-left: 4px solid #2563eb;
+            border-radius: 8px;
+            padding: 20px;
+            line-height: 1.7;
+            white-space: pre-line;
+            font-size: 14px;
+        }
+
+        /* PREVIOUS */
+
+        .previous-box {
+            background: #f8fafc;
+            border: 1px solid #e5eaf2;
+            border-radius: 8px;
+            padding: 16px;
+            margin-top: 12px;
+            line-height: 1.6;
+            font-size: 14px;
+        }
+
+        .previous-label {
+            color: #64748b;
+            font-size: 12px;
+            font-weight: 700;
+            margin-bottom: 7px;
+        }
+
+        /* SUMMARY */
+
+        .summary-box {
+            background: #f0fdf4;
+            border: 1px solid #bbf7d0;
+            border-left: 4px solid #16a34a;
+            border-radius: 8px;
+            padding: 18px;
+            line-height: 1.6;
+            font-size: 14px;
+        }
+
+        /* FOOTER */
+
+        .footer {
+            text-align: center;
+            color: #64748b;
+            font-size: 12px;
+            padding: 25px;
+        }
+
+        /* MOBILE */
+
+        @media (max-width: 800px) {
+
+            .main-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .info-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .header h1 {
+                font-size: 26px;
+            }
+        }
+    </style>
+</head>
+
+
+<body>
+
+    <!-- HEADER -->
+
+    <header class="header">
+
+        <div class="header-content">
+
+            <div class="brand">
+                AI CUSTOMER SUPPORT PLATFORM
+            </div>
+
+            <h1>Intelligent Email Assistant</h1>
+
+            <p>
+                Analyze customer emails, retrieve similar interactions,
+                and generate professional AI-powered responses.
+            </p>
+
+        </div>
+
+    </header>
+
+
+    <main class="container">
+
+        <!-- INPUT + FEATURES -->
+
+        <div class="main-grid">
+
+            <!-- CUSTOMER EMAIL -->
+
+            <div class="card">
+
+                <div class="section-title">
+                    <div class="icon">✉</div>
+                    <h2>Customer Email</h2>
+                </div>
+
+                <form method="POST">
+
+                    <label>Customer Name</label>
+
+                    <input
+                        type="text"
+                        name="customer_name"
+                        placeholder="Enter customer name"
+                        required
+                    >
+
+
+                    <label>Email Subject</label>
+
+                    <input
+                        type="text"
+                        name="subject"
+                        placeholder="Enter email subject"
+                        required
+                    >
+
+
+                    <label>Customer Message</label>
+
+                    <textarea
+                        name="customer_email"
+                        placeholder="Enter the customer's email message..."
+                        required
+                    ></textarea>
+
+
+                    <label>Reply Tone</label>
+
+                    <select name="tone">
+
+                        <option value="Friendly">
+                            Friendly
+                        </option>
+
+                        <option value="Formal">
+                            Formal
+                        </option>
+
+                        <option value="Empathetic">
+                            Empathetic
+                        </option>
+
+                    </select>
+
+
+                    <button class="generate-btn" type="submit">
+                        Generate AI Reply
+                    </button>
+
+                </form>
+
+            </div>
+
+
+            <!-- SYSTEM FEATURES -->
+
+            <div class="card">
+
+                <div class="section-title">
+                    <div class="icon">✦</div>
+                    <h2>AI Capabilities</h2>
+                </div>
+
+                <div class="info-box">
+
+                    <div class="info-label">
+                        INTENT DETECTION
+                    </div>
+
+                    <div class="info-value">
+                        Identifies the customer's primary request
+                        automatically.
+                    </div>
+
+                </div>
+
+
+                <br>
+
+
+                <div class="info-box">
+
+                    <div class="info-label">
+                        SIMILAR EMAIL RETRIEVAL
+                    </div>
+
+                    <div class="info-value">
+                        Finds relevant previous customer
+                        interactions.
+                    </div>
+
+                </div>
+
+
+                <br>
+
+
+                <div class="info-box">
+
+                    <div class="info-label">
+                        AI REPLY GENERATION
+                    </div>
+
+                    <div class="info-value">
+                        Creates a professional response using
+                        Ollama AI.
+                    </div>
+
+                </div>
+
+
+                <br>
+
+
+                <div class="info-box">
+
+                    <div class="info-label">
+                        TONE IMPROVEMENT
+                    </div>
+
+                    <div class="info-value">
+                        Supports Friendly, Formal and
+                        Empathetic responses.
+                    </div>
+
+                </div>
+
+
+                <div class="status">
+                    <span class="dot"></span>
+                    AI Assistant Ready
+                </div>
+
+            </div>
+
+        </div>
+
+
+        {% if result %}
+
+        <!-- AI ANALYSIS -->
+
+        <div class="card full-width">
+
+            <div class="section-title">
+                <div class="icon">◈</div>
+                <h2>AI Analysis</h2>
+            </div>
+
+
+            <div class="info-grid">
+
+                <div class="info-box">
+
+                    <div class="info-label">
+                        CUSTOMER
+                    </div>
+
+                    <div class="info-value">
+                        {{ result.name }}
+                    </div>
+
+                </div>
+
+
+                <div class="info-box">
+
+                    <div class="info-label">
+                        SUBJECT
+                    </div>
+
+                    <div class="info-value">
+                        {{ result.subject }}
+                    </div>
+
+                </div>
+
+
+                <div class="info-box">
+
+                    <div class="info-label">
+                        DETECTED INTENT
+                    </div>
+
+                    <div class="intent">
+                        {{ result.intent }}
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- PREVIOUS INTERACTION -->
+
+        <div class="card full-width">
+
+            <div class="section-title">
+                <div class="icon">↻</div>
+                <h2>Similar Previous Interaction</h2>
+            </div>
+
+
+            <div class="previous-box">
+
+                <div class="previous-label">
+                    PREVIOUS CUSTOMER EMAIL
+                </div>
+
+                {{ result.previous_email }}
+
+            </div>
+
+
+            <div class="previous-box">
+
+                <div class="previous-label">
+                    PREVIOUS SUPPORT REPLY
+                </div>
+
+                {{ result.previous_reply }}
+
+            </div>
+
+        </div>
+
+
+        <!-- AI REPLY -->
+
+        <div class="card full-width">
+
+            <div class="section-title">
+                <div class="icon">✦</div>
+                <h2>AI Generated Reply</h2>
+            </div>
+
+
+            <div class="reply-box">
+                {{ result.reply }}
+            </div>
+
+        </div>
+
+
+        <!-- SUMMARY -->
+
+        <div class="card full-width">
+
+            <div class="section-title">
+                <div class="icon">▤</div>
+                <h2>Conversation Summary</h2>
+            </div>
+
+
+            <div class="summary-box">
+                {{ result.summary }}
+            </div>
+
+        </div>
+
+        {% endif %}
+
+    </main>
+
+
+    <footer class="footer">
+
+        Intelligent Email Assistant
+        &nbsp;•&nbsp;
+        Powered by Ollama
+        &nbsp;•&nbsp;
+        AI-Powered Customer Support
+
+    </footer>
+
+</body>
+
+</html>
